@@ -54,14 +54,14 @@ Partial Class StansGroceryForm
         'FileTopMenuItem
         '
         Me.FileTopMenuItem.Name = "FileTopMenuItem"
-        Me.FileTopMenuItem.Size = New System.Drawing.Size(72, 44)
+        Me.FileTopMenuItem.Size = New System.Drawing.Size(72, 40)
         Me.FileTopMenuItem.Text = "&File"
         '
         'HelpTopMenuItem
         '
         Me.HelpTopMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AboutTopMenuItem})
         Me.HelpTopMenuItem.Name = "HelpTopMenuItem"
-        Me.HelpTopMenuItem.Size = New System.Drawing.Size(85, 44)
+        Me.HelpTopMenuItem.Size = New System.Drawing.Size(85, 40)
         Me.HelpTopMenuItem.Text = "Help"
         '
         'AboutTopMenuItem

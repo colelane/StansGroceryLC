@@ -1,6 +1,7 @@
 ﻿Imports System.Text.RegularExpressions
 Public Class StansGroceryForm
 
+    Dim sizer, foodSizer, locSizer, catSizer As Integer
     Public Sub StansGroceryForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Timer1.Start()
         SplashScreenForm.BackgroundImageLayout = ImageLayout.Stretch
@@ -11,101 +12,61 @@ Public Class StansGroceryForm
 
 
         Dim match As Match
-        Dim arr As String() = SplitWords(My.Resources.Grocery)
+        Dim initialArray As String() = SplitWords(My.Resources.Grocery)
+        'Alphabetizer section.
+        Dim initialArrStr As String = String.Join("", initialArray)
+        Dim alphabetizer() As String
+        alphabetizer = Regex.Split(initialArrStr, vbLf)
+        Array.Sort(alphabetizer)
+        Dim sortedStr As String = String.Join("", alphabetizer)
+        Dim arr() As String
+
+        'Uses a zero width positive lookbehind assertion to split the array back 
+        'into Single lines to prepare for matching
+        arr = Regex.Split(sortedStr, "(?=ITM)|(?=LOC)|(?=CAT)")
 
 
-        Dim foodSizer, foodSizer2, locSizer, locSizer2, catSizer, catSizer2 As Integer
-
-
-
-
-
-        'Items
         For i = 0 To UBound(arr)
             match = Regex.Match(arr(i), "ITM")
             If match.Success = True Then
-                foodSizer += 1
+                sizer += 1
             End If
         Next
-        Dim finalArr(foodSizer, 2) As String
+        Dim finalArr(sizer, 2) As String
 
-
-        Dim items(foodSizer) As String
-        foodSizer2 = 0
-        'For p = 0 To UBound(arr)
-        '    match = Regex.Match(arr(p), "ITM")
-        '    If match.Success = True Then
-        '        items(foodSizer2) = arr(p)
-        '        foodSizer2 += 1
-        '    End If
-        'Next
-
-        'Final Array Loader
+        foodSizer = 0
         For p = 0 To UBound(arr)
             match = Regex.Match(arr(p), "ITM")
             If match.Success = True Then
-                finalArr(foodSizer2, 0) = arr(p)
-                foodSizer2 += 1
+                finalArr(foodSizer, 0) = arr(p)
+                foodSizer += 1
             End If
         Next
 
-        'LOCS
-        For l = 0 To UBound(arr)
-            match = Regex.Match(arr(l), "LOC")
+        'LOC
+        locSizer = 0
+        For k = 0 To UBound(arr)
+            match = Regex.Match(arr(k), "LOC")
             If match.Success = True Then
+                finalArr(locSizer, 1) = arr(k)
                 locSizer += 1
             End If
         Next
 
-        Dim locs(locSizer) As String
-        locSizer2 = 0
-        'For k = 0 To UBound(arr)
-        '    match = Regex.Match(arr(k), "LOC")
-        '    If match.Success = True Then
-        '        locs(locSizer2) = arr(k)
-        '        locSizer2 += 1
-        '    End If
-        'Next
-
-        'Final Array Loader
-        For k = 0 To UBound(arr)
-            match = Regex.Match(arr(k), "LOC")
+        'Categories
+        catSizer = 0
+        For r = 0 To UBound(arr)
+            match = Regex.Match(arr(r), "CAT")
             If match.Success = True Then
-                finalArr(locSizer2, 1) = arr(k)
-                locSizer2 += 1
-            End If
-        Next
-
-        'CATS
-        For y = 0 To UBound(arr)
-            match = Regex.Match(arr(y), "LOC")
-            If match.Success = True Then
+                finalArr(catSizer, 2) = arr(r)
                 catSizer += 1
             End If
         Next
 
-        Dim cats(catSizer) As String
-        catSizer2 = 0
-        'For r = 0 To UBound(arr)
-        '    match = Regex.Match(arr(r), "CAT")
-        '    If match.Success = True Then
-        '        cats(catSizer2) = arr(r)
-        '        catSizer2 += 1
-        '    End If
-        'Next
-
-        'Final Array Loader
-        For r = 0 To UBound(arr)
-            match = Regex.Match(arr(r), "CAT")
-            If match.Success = True Then
-                finalArr(catSizer2, 2) = arr(r)
-                catSizer2 += 1
-            End If
-        Next
 
 
 
-        For j = 0 To (UBound(items) - 1)
+        For j = 0 To (sizer - 1)
             For p = 0 To 2
 
                 finalArr(j, p) = Regex.Replace(finalArr(j, p), "Ω", "/")
@@ -114,14 +75,9 @@ Public Class StansGroceryForm
                 finalArr(j, p) = Regex.Replace(finalArr(j, p), "CAT", String.Empty)
                 DisplayListBox.Items.Add(finalArr(j, p))
             Next
-
-
-
-            'items(j) = Regex.Replace(items(j), "Ω", "/")
-            'items(j) = Regex.Replace(items(j), "ITM", String.Empty)
-            'locs(j) = Regex.Replace(locs(j), "LOC", String.Empty)
-            'cats(j) = Regex.Replace(locs(j), "CAT", String.Empty)
         Next
+
+
     End Sub
 
 
@@ -134,8 +90,11 @@ Public Class StansGroceryForm
     Private Function SplitWords(ByVal s As String) As String()
         Dim initialSplit As String = Regex.Replace(s, "/", "Ω")
         Return Regex.Split(initialSplit, "\p{P}|\p{Sc}")
-        'best pattern so far \W+(?!ITM)\w+\b
+
+        'actual best pattern \p{P}|\p{Sc}
     End Function
 
+    Private Sub DisplayListBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles DisplayListBox.SelectedIndexChanged
 
+    End Sub
 End Class

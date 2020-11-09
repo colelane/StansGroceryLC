@@ -1,7 +1,8 @@
 ﻿Imports System.Text.RegularExpressions
 Public Class StansGroceryForm
-
     Dim sizer, foodSizer, locSizer, catSizer As Integer
+    Dim finalarr2(255, 2) As String
+
     Public Sub StansGroceryForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Timer1.Start()
         SplashScreenForm.BackgroundImageLayout = ImageLayout.Stretch
@@ -10,9 +11,9 @@ Public Class StansGroceryForm
         SplashScreenForm.Show()
         Me.Show()
 
-
         Dim match As Match
         Dim initialArray As String() = SplitWords(My.Resources.Grocery)
+
         'Alphabetizer section.
         Dim initialArrStr As String = String.Join("", initialArray)
         Dim alphabetizer() As String
@@ -32,7 +33,7 @@ Public Class StansGroceryForm
                 sizer += 1
             End If
         Next
-        Dim finalArr(sizer, 2) As String
+        Dim finalArr(sizer - 1, 2) As String
 
         foodSizer = 0
         For p = 0 To UBound(arr)
@@ -76,8 +77,9 @@ Public Class StansGroceryForm
                 DisplayListBox.Items.Add(finalArr(j, p))
             Next
         Next
+        Array.Copy(finalArr, finalarr2, finalArr.Length)
 
-
+        Console.Read()
     End Sub
 
 
@@ -94,7 +96,5 @@ Public Class StansGroceryForm
         'actual best pattern \p{P}|\p{Sc}
     End Function
 
-    Private Sub DisplayListBox_SelectedIndexChanged(sender As Object, e As EventArgs) Handles DisplayListBox.SelectedIndexChanged
 
-    End Sub
 End Class

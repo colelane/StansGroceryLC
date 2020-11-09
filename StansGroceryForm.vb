@@ -1,7 +1,33 @@
-﻿Imports System.Text.RegularExpressions
+﻿Option Compare Text
+Imports System.Text.RegularExpressions
 Public Class StansGroceryForm
     Dim sizer, foodSizer, locSizer, catSizer As Integer
     Dim finalarr2(255, 2) As String
+
+    Private Sub ComboBox1_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBox1.SelectedIndexChanged
+        DisplayListBox.Items.Clear()
+        For a = 0 To 255
+            For b = 0 To 2
+                If ComboBox1.Text = finalarr2(a, b) Then
+                    DisplayListBox.Items.Add("You will find " & finalarr2(a, b) & " on aisle " & finalarr2(a, b + 1) & " with the " & finalarr2(a, b + 2))
+                End If
+            Next
+        Next
+    End Sub
+
+    Private Sub SearchButton_Click(sender As Object, e As EventArgs) Handles SearchButton.Click
+        DisplayListBox.Items.Clear()
+        For a = 0 To 255
+            For b = 0 To 2
+                If TextBox1.Text = finalarr2(a, b) Then
+                    DisplayListBox.Items.Add("You will find " & finalarr2(a, b) & " on aisle " & finalarr2(a, b + 1) & " with the " & finalarr2(a, b + 2))
+                End If
+            Next
+        Next
+        If DisplayListBox.Items.Count = 0 Then
+            DisplayListBox.Items.Add("Item could not be found")
+        End If
+    End Sub
 
     Public Sub StansGroceryForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Timer1.Start()
@@ -35,6 +61,7 @@ Public Class StansGroceryForm
         Next
         Dim finalArr(sizer - 1, 2) As String
 
+        'Food
         foodSizer = 0
         For p = 0 To UBound(arr)
             match = Regex.Match(arr(p), "ITM")
@@ -64,35 +91,27 @@ Public Class StansGroceryForm
             End If
         Next
 
-
-
-
         For j = 0 To (sizer - 1)
             For p = 0 To 2
-
                 finalArr(j, p) = Regex.Replace(finalArr(j, p), "Ω", "/")
                 finalArr(j, p) = Regex.Replace(finalArr(j, p), "ITM", String.Empty)
                 finalArr(j, p) = Regex.Replace(finalArr(j, p), "LOC", String.Empty)
                 finalArr(j, p) = Regex.Replace(finalArr(j, p), "CAT", String.Empty)
-                DisplayListBox.Items.Add(finalArr(j, p))
             Next
+            ComboBox1.Items.Add(finalArr(j, 0))
         Next
         Array.Copy(finalArr, finalarr2, finalArr.Length)
-
-        Console.Read()
     End Sub
 
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
         Timer1.Stop()
         SplashScreenForm.Hide()
-
     End Sub
 
     Private Function SplitWords(ByVal s As String) As String()
         Dim initialSplit As String = Regex.Replace(s, "/", "Ω")
         Return Regex.Split(initialSplit, "\p{P}|\p{Sc}")
-
         'actual best pattern \p{P}|\p{Sc}
     End Function
 

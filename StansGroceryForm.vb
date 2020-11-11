@@ -1,21 +1,40 @@
 ﻿Option Compare Text
+Option Strict On
+Option Explicit On
+'Lane Coleman
+'RCET 0265
+'Stans Grocery
+'https://github.com/colelane/StansGroceryLC.git
+
 Imports System.Text.RegularExpressions
 Public Class StansGroceryForm
     Dim finalarr2(255, 2), sortedLocs(16), sortedCats(23) As String
 
-
-
-
     Private Sub SearchButton_Click(sender As Object, e As EventArgs) Handles SearchButton.Click
+        Dim goodData As Boolean
+        Dim searchMatch As Match
+        goodData = False
         DisplayListBox.Items.Clear()
+        DisplayLabel.Text = String.Empty
+
+        If SearchTextBox.TextLength = 1 Then
+                DisplayLabel.Text = "Please be more specific."
+            Exit Sub
+        End If
+
         For a = 0 To 255
-            For b = 0 To 2
-                If SearchTextBox.Text = finalarr2(a, b) Then
-                    DisplayListBox.Items.Add(finalarr2(a, 0))
-                End If
-            Next
+            searchMatch = Regex.Match(finalarr2(a, 0), SearchTextBox.Text, RegexOptions.IgnoreCase)
+            If searchMatch.Success = True Then
+                DisplayListBox.Items.Add(finalarr2(a, 0))
+                goodData = True
+            End If
         Next
 
+        If goodData = False Then
+            DisplayLabel.Text = $"Sorry, no matches for {SearchTextBox.Text}"
+        End If
+
+        DisplayListBox.Items.Remove("  ")
     End Sub
 
     Private Sub ExitToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.Click
@@ -32,20 +51,25 @@ Public Class StansGroceryForm
         Next
     End Sub
 
-    Private Sub FilterByAisleButton_CheckedChanged(sender As Object, e As EventArgs) Handles FilterByAisleButton.CheckedChanged
+    Private Sub RadioButton_CheckedChanged(sender As Object, e As EventArgs) Handles FilterByAisleButton.CheckedChanged, FilterByCategoryButton.CheckedChanged
         If FilterByAisleButton.Checked = True Then
             FilterComboBox.Items.Clear()
             FilterComboBox.Items.Add("Show All")
+            FilterComboBox.Items.Add("Choose Aisle...")
+            FilterComboBox.SelectedItem = "Choose Aisle..."
             For t = 0 To UBound(sortedLocs)
                 FilterComboBox.Items.Add(sortedLocs(t))
             Next
         Else
             FilterComboBox.Items.Clear()
             FilterComboBox.Items.Add("Show All")
+            FilterComboBox.Items.Add("Choose Category...")
+            FilterComboBox.SelectedItem = "Choose Category..."
             For l = 0 To UBound(sortedLocs)
                 FilterComboBox.Items.Add(sortedCats(l))
             Next
         End If
+        FilterComboBox.Items.Remove("  ")
     End Sub
 
     Private Sub ExitToolStripMenuItem1_Click(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem1.Click
@@ -67,7 +91,7 @@ Public Class StansGroceryForm
                 End If
             Next
         Next
-
+        DisplayListBox.Items.Remove("  ")
     End Sub
 
     Public Sub StansGroceryForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
@@ -148,6 +172,8 @@ Public Class StansGroceryForm
         Array.Copy(finalArr, finalarr2, finalArr.Length)
         LocSorter()
         CatSorter()
+
+        FilterComboBox.SelectedItem = "Show All"
     End Sub
 
 
@@ -169,6 +195,9 @@ Public Class StansGroceryForm
         Array.Sort(sortedLocs)
         Console.Read()
     End Sub
+
+
+
     Sub CatSorter()
         Dim cats(UBound(finalarr2)) As String
 

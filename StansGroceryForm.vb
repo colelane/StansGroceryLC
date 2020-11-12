@@ -102,6 +102,7 @@ Public Class StansGroceryForm
         Dim searchMatch As Match
         goodData = False
         DisplayListBox.Items.Clear()
+        DisplayLabel.Text = String.Empty
         'Too many items come up when only one character is used.
         If SearchTextBox.TextLength = 1 Then
             DisplayLabel.Text = "Please be more specific."

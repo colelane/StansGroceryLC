@@ -73,6 +73,12 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbootForm.Designer.vb">
+      <DependentUpon>AbootForm.vb</DependentUpon>
+    </Compile>
+    <Compile Include="AbootForm.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="SplashScreenForm.Designer.vb">
       <DependentUpon>SplashScreenForm.vb</DependentUpon>
     </Compile>
@@ -103,6 +109,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AbootForm.resx">
+      <DependentUpon>AbootForm.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
@@ -137,6 +146,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Grocery.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="canada.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

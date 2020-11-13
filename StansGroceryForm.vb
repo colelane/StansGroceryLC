@@ -9,7 +9,7 @@ Option Explicit On
 
 Imports System.Text.RegularExpressions
 Public Class StansGroceryForm
-    Dim finalarr2(255, 2), sortedLocs(16), sortedCats(23) As String
+    Dim finalarr2(255, 2), sortedLocs(16), sortedCats(23) As String ' Array should be food$() - TJR
 
     Public Sub StansGroceryForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'This group of text handles the initial splash screen.
